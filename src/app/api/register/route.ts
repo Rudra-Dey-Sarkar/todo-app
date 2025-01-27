@@ -13,7 +13,7 @@ const userModel = mongoose.models.users || mongoose.model("users", usersSchema);
 
 export const POST = async (req: NextRequest) => {
     const data = await req.json();
-
+    
     const allData = {
         name: data.name,
         email: data.email,

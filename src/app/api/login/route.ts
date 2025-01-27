@@ -3,7 +3,6 @@ import { NextResponse, NextRequest } from "next/server";
 import mongoose from "mongoose";
 
 const usersSchema = new mongoose.Schema({
-    name: String,
     email: String,
     password: String
 },
@@ -18,7 +17,12 @@ export const POST = async (req: NextRequest) => {
         const response = await userModel.find({ email: data?.email });
 
         if (response.length > 0) {
-            return NextResponse.json({ status: 200, message: response });
+
+            if(response[0]?.password===data.password){
+                return NextResponse.json({ status: 200, message: response });
+            }else{
+                return NextResponse.json({ status: 404, message: "Wrong Password" });
+            }
         } else {
             return NextResponse.json({ status: 404, message: "User not found" });
         }

@@ -15,18 +15,18 @@ function LogReg() {
     return (
         <div>
             {isLogin === false ?
-                <div>
+                <div className='grid gap-y-2'>
                     <Login />
                     <p>You don't have an account ? <button
                     onClick={()=>ControlLoginRegister(isLogin, setIsLogin)}
-                    >Register</button></p>
+                    className='text-blue-600 font-semibold'>Register</button></p>
                 </div>
                 :
-                <div>
+                <div className='grid gap-y-2'>
                     <Register />
                     <p>You already have an account ? <button
                     onClick={()=>ControlLoginRegister(isLogin, setIsLogin)}
-                    >Login</button></p>
+                    className='text-blue-600 font-semibold'>Login</button></p>
                 </div>}
         </div>
     )
