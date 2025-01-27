@@ -186,7 +186,7 @@ function Today() {
                         onClick={() => setAF(true)}>ADD TASK</button>
                 </div>
             </div>
-
+            
             {tasks.length > 0 ?
                 <div className='flex'>
                     <div className='px-3 w-full h-full'>
