@@ -4,6 +4,7 @@ import AddTask from '../AddTask/AddTask'
 import { GlobalContext } from '../../GlobalContext/GlobalContext';
 import { getCookie } from 'cookies-next';
 import TaskModal from '../TaskModal/TaskModal';
+import EditTask from '../EditTask/EditTask';
 
 type UserDataType = [{
     name: string,
@@ -20,7 +21,6 @@ type TasksDataType = [{
     notes: string,
     important: boolean,
     reminder: boolean,
-    repeat: boolean,
     status: boolean,
 }]
 
@@ -46,7 +46,7 @@ async function ViewTaskData(userId: string, setTasks: React.Dispatch<React.SetSt
 }
 async function EditTaskImportantData(id: string, important: boolean, dependancy: boolean, setDependancy: React.Dispatch<React.SetStateAction<boolean>>) {
     const data = {
-        id: id,
+        _id: id,
         important: important === false ? true : false
     }
     try {
@@ -70,7 +70,7 @@ async function EditTaskImportantData(id: string, important: boolean, dependancy:
 }
 async function EditTaskStatusData(id: string, status: boolean, dependancy: boolean, setDependancy: React.Dispatch<React.SetStateAction<boolean>>) {
     const data = {
-        id: id,
+        _id: id,
         status: status === false ? true : false
     }
     try {
@@ -92,7 +92,7 @@ async function EditTaskStatusData(id: string, status: boolean, dependancy: boole
         console.log("Cannot Proceed To Edit Task Data Due To :-", errors);
     }
 }
-function ControlTaskModal(taskModal: boolean, setTaskModal: React.Dispatch<React.SetStateAction<boolean>>, id:string ,setTaskId:React.Dispatch<React.SetStateAction<string>>) {
+function ControlTaskModal(taskModal: boolean, setTaskModal: React.Dispatch<React.SetStateAction<boolean>>, id: string, setTaskId: React.Dispatch<React.SetStateAction<string>>) {
     if (taskModal === false) {
         setTaskId(id);
         setTaskModal(true);
@@ -103,6 +103,7 @@ function ControlTaskModal(taskModal: boolean, setTaskModal: React.Dispatch<React
 
 function Today() {
     const [AF, setAF] = useState<boolean>(false);
+    const [EF, setEF] = useState<boolean>(false);
     const [dependancy, setDependancy] = useState<boolean>(false);
     const [taskModal, setTaskModal] = useState<boolean>(false);
     const [taskId, setTaskId] = useState<string>("");
@@ -135,6 +136,17 @@ function Today() {
                         className='bg-white p-5 rounded-md shadow-lg'
                         onClick={(e) => e.stopPropagation()}>
                         <AddTask user={user} setAF={setAF} />
+                    </div>
+                </div>
+            }
+            {EF === true &&
+                <div
+                    className='flex fixed inset-0 justify-center items-center bg-black bg-opacity-50 z-50'
+                    onClick={() => setEF(false)}>
+                    <div
+                        className='bg-white p-5 rounded-md shadow-lg'
+                        onClick={(e) => e.stopPropagation()}>
+                        <EditTask taskId={taskId} setEF={setEF} />
                     </div>
                 </div>
             }
@@ -186,12 +198,12 @@ function Today() {
                         onClick={() => setAF(true)}>ADD TASK</button>
                 </div>
             </div>
-            
+
             {tasks.length > 0 ?
                 <div className='flex'>
                     <div className='px-3 w-full h-full'>
                         {/* Progressing Tasks */}
-                        <p className='text-[1.2rem] font-semibold border-b-2 border-gray-300 mb-3'>Progressing Task</p>
+                        <p className='text-[1.2rem] font-semibold border-b-2 border-gray-300 mb-3'>Progressing Task :-</p>
                         {tasks?.map((task: TasksDataType[0], index: number) =>
                             <div
                                 key={index}>
@@ -245,7 +257,7 @@ function Today() {
                                                     </svg>}
                                             </button>
                                             <p className='w-full h-full py-3 hover:cursor-pointer'
-                                            onClick={() => ControlTaskModal(taskModal, setTaskModal, task._id ,setTaskId)}>{task?.taskName}</p>
+                                                onClick={() => ControlTaskModal(taskModal, setTaskModal, task._id, setTaskId)}>{task?.taskName}</p>
                                         </div>
                                         <button onClick={() => EditTaskImportantData(task?._id, task?.important, dependancy, setDependancy)}>
                                             {task?.important === false ?
@@ -277,7 +289,7 @@ function Today() {
                             </div>)}
 
                         {/* Completed Task */}
-                        <p className='text-[1.2rem] font-semibold border-b-2 border-gray-300 mb-3'>Completed Tasks</p>
+                        <p className='text-[1.2rem] font-semibold border-b-2 border-gray-300 mb-3'>Completed Tasks :-</p>
                         {tasks?.map((task: TasksDataType[0], index: number) =>
                             <div
                                 key={index}>
@@ -332,7 +344,7 @@ function Today() {
                                                     </svg>}
                                             </button>
                                             <p className='w-full h-full py-3 hover:cursor-pointer'
-                                            onClick={() => ControlTaskModal(taskModal, setTaskModal,task._id, setTaskId)}>{task?.taskName}</p>
+                                                onClick={() => ControlTaskModal(taskModal, setTaskModal, task._id, setTaskId)}>{task?.taskName}</p>
                                         </div>
                                         <button onClick={() => EditTaskImportantData(task?._id, task?.important, dependancy, setDependancy)}>
                                             {task?.important === false ?
@@ -364,7 +376,7 @@ function Today() {
                             </div>)}
                     </div>
                     {taskModal === true &&
-                        <TaskModal setTaskModal={setTaskModal} taskId={taskId}  dependancy={ dependancy} setDependancy={ setDependancy} />
+                        <TaskModal setTaskModal={setTaskModal} taskId={taskId} dependancy={dependancy} setDependancy={setDependancy} setEF={setEF} />
                     }
                 </div>
                 :

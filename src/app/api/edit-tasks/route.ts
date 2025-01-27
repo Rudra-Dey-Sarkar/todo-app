@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from "next/server"
 import mongoose from "mongoose"
 
 const tasksSchema = new mongoose.Schema({
+  _id: String,
   userId: String,
   taskName: String,
   date: String,
@@ -19,18 +20,17 @@ const tasksModel = mongoose.models.tasks || mongoose.model("tasks", tasksSchema)
 
 export const PUT = async (req: NextRequest) => {
   const data = await req.json();
-  const { id, ...AllData } = data;
-
+  const { _id, ...AllData } = data;
   try {
     if (!data.steps) {
-      const response = await tasksModel.findOneAndUpdate({ _id: id }, { $set: AllData }, { new: true });
+      const response = await tasksModel.findOneAndUpdate({ _id:_id }, { $set: AllData }, { new: true });
       if (response.length > 0 || response !== null) {
         return NextResponse.json({ status: 200, message: response });
       } else {
         return NextResponse.json({ status: 404, message: "Cannot Edit Tasks" });
       }
     } else {
-      const response = await tasksModel.findOneAndUpdate({ _id: id }, { $push: AllData }, { new: true });
+      const response = await tasksModel.findOneAndUpdate({ _id:_id }, { $push: AllData }, { new: true });
       if (response.length > 0 || response !== null) {
         return NextResponse.json({ status: 200, message: response });
       } else {

@@ -4,6 +4,7 @@ import mongoose from "mongoose"
 import ConnectDB from "../../../../actions/db";
 
 const tasksSchema = new mongoose.Schema({
+  _id: String,
   userId: String,
   taskName: String,
   date: String,
@@ -24,7 +25,7 @@ export const DELETE = async (req: NextRequest) => {
 
   try {
 
-    const response = await tasksModel.findOneAndDelete({ _id: data?.id });
+    const response = await tasksModel.findOneAndDelete({ _id: data?._id });
     if (response.length > 0 || response !== null) {
       return NextResponse.json({ status: 200, message: response });
     } else {

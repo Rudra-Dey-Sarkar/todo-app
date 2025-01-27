@@ -20,7 +20,6 @@ type TasksDataType = [{
     notes: string,
     important: boolean,
     reminder: boolean,
-    repeat: boolean,
     status: boolean,
 }]
 
@@ -72,6 +71,7 @@ function ControlTaskModal(taskModal: boolean, setTaskModal: React.Dispatch<React
 function AllTasks() {
     const [dependancy, setDependancy] = useState<boolean>(false);
     const [taskModal, setTaskModal] = useState<boolean>(false);
+    const [EF, setEF] = useState<boolean>(false);
     const [taskId, setTaskId] = useState<string>("");
     const [tasks, setTasks] = useState<AdvanceTaskDataType | any[]>([]);
     const [user, setUser] = useState<UserDataType | any[]>([]);
@@ -143,7 +143,7 @@ function AllTasks() {
                     <div className='px-3 w-full h-full'>
                         {tasks?.map((task: AdvanceTaskDataType[0], index: number) =>
                             <div key={index}>
-                                <p className='text-[1rem] font-semibold underline my-3'>{task[0]}</p>
+                                <p className='text-[1rem] font-semibold underline my-3'>{task[0]} :-</p>
                                 {task[1]?.map((t: TasksDataType[0], ind: number) =>
                                     <div
                                         key={ind}>
@@ -231,7 +231,7 @@ function AllTasks() {
                             </div>)}
                     </div>
                     {taskModal === true &&
-                        <TaskModal setTaskModal={setTaskModal} taskId={taskId} dependancy={dependancy} setDependancy={setDependancy} />
+                        <TaskModal setTaskModal={setTaskModal} taskId={taskId} dependancy={dependancy} setDependancy={setDependancy} setEF={setEF} />
                     }
                 </div>
                 :
