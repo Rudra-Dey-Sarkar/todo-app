@@ -1,6 +1,7 @@
 "use server"
 import { NextResponse, NextRequest } from "next/server";
 import mongoose from "mongoose";
+import ConnectDB from "../../../../actions/db";
 
 const usersSchema = new mongoose.Schema({
     name: String,
@@ -12,6 +13,7 @@ const usersSchema = new mongoose.Schema({
 const userModel = mongoose.models.users || mongoose.model("users", usersSchema);
 
 export const POST = async (req: NextRequest) => {
+    ConnectDB();
     const data = await req.json();
     
     const allData = {

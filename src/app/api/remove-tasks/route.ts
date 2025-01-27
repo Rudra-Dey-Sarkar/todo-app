@@ -1,6 +1,7 @@
 "use server"
 import { NextRequest, NextResponse } from "next/server"
 import mongoose from "mongoose"
+import ConnectDB from "../../../../actions/db";
 
 const tasksSchema = new mongoose.Schema({
   userId: String,
@@ -18,6 +19,7 @@ const tasksModel = mongoose.models.tasks || mongoose.model("tasks", tasksSchema)
 
 
 export const DELETE = async (req: NextRequest) => {
+  ConnectDB();
   const data = await req.json();
 
   try {

@@ -1,7 +1,6 @@
 "use client"
 import React, { useContext, useEffect, useState } from 'react'
 import { GlobalContext } from '../../GlobalContext/GlobalContext'
-import ConnectDB from '../../actions/db';
 import { Toaster } from 'react-hot-toast';
 import { getCookie } from 'cookies-next';
 import { useRouter } from 'next/navigation';
@@ -18,11 +17,6 @@ function ClientLayout({ children }: { children: React.ReactNode }) {
     const router = useRouter();
     const { isPresent, setIsPresent }: any = useContext(GlobalContext);
     const [user, setUser] = useState<UserDataType | any[]>([]);
-
-    useEffect(() => {
-        ConnectDB();
-    }, []);
-
 
     useEffect(() => {
         const cookies = getCookie("user");
