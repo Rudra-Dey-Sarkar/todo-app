@@ -30,16 +30,17 @@ function Sidebar({ user }: { user: UserDataType | any[] }) {
   const { sidebar, setSidebar }: any = useContext(GlobalContext);
 
   return (
-    <div className= "w-fit h-[100vh]">
-      <div className={`grid  ${sidebar === true ? "relative" : "hidden"} py-[60px] w-[230px] h-full`} >
+    <div className="w-fit bg-white min-h-[100vh] sm:relative absolute">
+      <div className={`grid  ${sidebar === true ? "relative" : "hidden"} pt-[60px] w-[230px] sm:h-full min-h-[100vh]`} >
 
-        <div className="grid bg-[#EEF6EF] w-full h-full px-3" >
-          <div className='flex justify-center items-center bg-[#EEF6EF]'>
+        <div className="bg-[#EEF6EF] w-full h-full px-3" >
+
+          <div className='flex justify-center w-full h-fit bg-[#EEF6EF] '>
             <div className='mt-7 absolute inset-0 w-full h-fit'>
               <img
                 src="#"
                 alt="picture"
-                className='mx-auto w-[70px] h-[70px] rounded-full border-2 border-gray-500'
+                className='mx-auto p-1 w-[70px] h-[70px] rounded-full border-2 border-gray-500'
                 onClick={() => ControlOptions(options, setOptions)} />
 
               {options === true &&
@@ -56,11 +57,11 @@ function Sidebar({ user }: { user: UserDataType | any[] }) {
                 </div>
               }
             </div>
-            <p className='font-semibold mt-7'>{user.length > 0 ? user[0].name : "Name"}</p>
+            <p className='font-semibold mt-12'>{user.length > 0 ? user[0].name : "Name"}</p>
           </div>
 
-          <div className='bg-white w-full h-fit'>
-          <Link href="/today" className={`flex justify-start items-center gap-x-3 px-2 py-3 hover:bg-[#35793729] ${pathname === "/today" ? "bg-[#35793729] text-[#357937]" : ""}`}>
+          <div className='bg-white mt-14 mb-5 w-full h-fit'>
+            <Link href="/today" className={`flex justify-start items-center gap-x-3 px-2 py-3 hover:bg-[#35793729] ${pathname === "/today" ? "bg-[#35793729] text-[#357937]" : ""}`}>
               <svg
                 width={24}
                 height={25}
@@ -133,7 +134,7 @@ function Sidebar({ user }: { user: UserDataType | any[] }) {
 
           <div className='bg-white w-full h-fit py-5'>
           </div>
-          
+
         </div>
       </div>
     </div>

@@ -14,9 +14,9 @@ type TasksDataType = [{
   status: boolean,
 }]
 
-async function ViewSpecificTaskData(id: string, setTasks: React.Dispatch<React.SetStateAction<any[] | TasksDataType>>) {
+async function ViewSpecificTaskData(id: string | undefined, setTasks: React.Dispatch<React.SetStateAction<any[] | TasksDataType>>) {
   try {
-    const response = await fetch("/api/view-specific-tasks", {
+    const response = await fetch("/api/view-specific-tasks-data", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -34,7 +34,7 @@ async function ViewSpecificTaskData(id: string, setTasks: React.Dispatch<React.S
     console.log("Cannot Proceed To View Task Data Due To :-", errors);
   }
 }
-async function DeleteTaskData(id: string, dependancy: boolean, setDependancy: React.Dispatch<React.SetStateAction<boolean>>, setTaskModal: React.Dispatch<React.SetStateAction<boolean>>) {
+async function DeleteTaskData(id: string | undefined, dependancy: boolean, setDependancy: React.Dispatch<React.SetStateAction<boolean>>, setTaskModal: React.Dispatch<React.SetStateAction<boolean>>) {
   try {
     const response = await fetch("/api/remove-tasks", {
       method: "DELETE",
@@ -128,7 +128,7 @@ async function EditTaskStepsData(data: TasksDataType[0], dependancy: boolean, se
     console.log("Cannot Proceed To Edit Task Data Due To :-", errors);
   }
 }
-async function EditTaskReminderData(id: string | undefined, reminder: boolean | undefined, dependancy: boolean, setDependancy: React.Dispatch<React.SetStateAction<boolean>>, dep: boolean, setDep: React.Dispatch<React.SetStateAction<boolean>>) {
+async function EditTaskReminderData(id: TasksDataType[0] | undefined, reminder: boolean | undefined, dependancy: boolean, setDependancy: React.Dispatch<React.SetStateAction<boolean>>, dep: boolean, setDep: React.Dispatch<React.SetStateAction<boolean>>) {
   const data = {
     _id: id,
     reminder: reminder === false ? true : false
@@ -161,7 +161,7 @@ function ControlAddStep(addStep: boolean, setAddStep: React.Dispatch<React.SetSt
   }
 }
 
-function TaskModal({ setTaskModal, taskId, dependancy, setDependancy, setEF }: { setTaskModal: React.Dispatch<React.SetStateAction<boolean>>, taskId: string, dependancy: boolean, setDependancy: React.Dispatch<React.SetStateAction<boolean>>, setEF: React.Dispatch<React.SetStateAction<boolean>> }) {
+function TaskModal({ setTaskModal, taskData, dependancy, setDependancy, setEF }: { setTaskModal: React.Dispatch<React.SetStateAction<boolean>>, taskData: TasksDataType[0] | undefined, dependancy: boolean, setDependancy: React.Dispatch<React.SetStateAction<boolean>>, setEF: React.Dispatch<React.SetStateAction<boolean>> }) {
   const pathname = usePathname();
   const [tasks, setTasks] = useState<TasksDataType | any[]>([]);
   const [dep, setDep] = useState<boolean>(false);
@@ -169,20 +169,20 @@ function TaskModal({ setTaskModal, taskId, dependancy, setDependancy, setEF }: {
 
   const form = useForm<TasksDataType[0]>({
     defaultValues: {
-      _id: taskId,
+      _id: taskData?._id,
       steps: []
     }
   });
   const { register, handleSubmit, formState: { errors } } = form;
 
   useEffect(() => {
-    ViewSpecificTaskData(taskId, setTasks);
+    ViewSpecificTaskData(taskData?._id, setTasks);
   }, [dep]);
 
   return (
-    <div className='grid gap-y-3 bg-[#EEF6EF] w-[40vw] px-2'>
-      <div className='grid gap-y-2'>
-        <div className='flex justify-between px-3 border-b-2 border-[#35793729] hover:bg-[#35793729]'>
+    <div className='grid gap-y-3 bg-[#EEF6EF] sm:w-[40vw] w-[75vw] min-h-[100vh] px-2'>
+      <div className='grid w-full h-fit gap-y-2'>
+        <div className='flex justify-between w-full h-fit px-3 border-b-2 border-[#35793729] hover:bg-[#35793729]'>
           <div className='flex justify-between gap-x-3 w-full h-full'>
             <button
               disabled={pathname === "/all-tasks"}
@@ -264,22 +264,24 @@ function TaskModal({ setTaskModal, taskId, dependancy, setDependancy, setEF }: {
         </div>
 
         <div className='grid gap-y-2'>
-          <button
-            className='flex w-full gap-x-3 items-center px-3 py-3 border-b-2 border-[#35793729] hover:bg-[#35793729]'
-            onClick={() => ControlAddStep(addStep, setAddStep)}>
-            <svg
-              width={20}
-              height={20}
-              viewBox="0 0 20 20"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg">
-              <path
-                d="M9.16667 10.8333H0V9.16667H9.16667V0H10.8333V9.16667H20V10.8333H10.8333V20H9.16667V10.8333Z"
-                fill="black"
-              />
-            </svg>
-            <p className='font-semibold'>Add Step</p>
-          </button>
+          {pathname !== "/all-tasks" &&
+            <button
+              className='flex w-full gap-x-3 items-center px-3 py-3 border-b-2 border-[#35793729] hover:bg-[#35793729]'
+              onClick={() => ControlAddStep(addStep, setAddStep)}>
+              <svg
+                width={20}
+                height={20}
+                viewBox="0 0 20 20"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M9.16667 10.8333H0V9.16667H9.16667V0H10.8333V9.16667H20V10.8333H10.8333V20H9.16667V10.8333Z"
+                  fill="black"
+                />
+              </svg>
+              <p className='font-semibold'>Add Step</p>
+            </button>
+          }
 
           {addStep === true &&
             <form onSubmit={handleSubmit((data) => EditTaskStepsData(data, dependancy, setDependancy, dep, setDep, setAddStep))}>
@@ -316,66 +318,67 @@ function TaskModal({ setTaskModal, taskId, dependancy, setDependancy, setEF }: {
           </div>
         </div>
 
-        <div>
-          <button
-            className={`flex w-full gap-x-3 items-center px-3 py-3 border-b-2 border-[#35793729] hover:bg-[#35793729] ${tasks[0]?.reminder === true ? "text-green-500" : "text-current"}`}
-            onClick={() => EditTaskReminderData(taskId, tasks[0]?.reminder, dependancy, setDependancy, dep, setDep)}>
-            <svg
-              width={24}
-              height={24}
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg">
-              <g clipPath="url(#clip0_5_2269)">
-                <path
-                  d="M21.6734 18.5534C21.0306 17.9802 20.4677 17.3232 20.0001 16.6C19.4891 15.6019 19.1831 14.5116 19.1001 13.3934V10.1C19.1045 8.34376 18.4675 6.64633 17.3086 5.32666C16.1498 4.007 14.5489 3.15592 12.8068 2.93335V2.07335C12.8068 1.83731 12.713 1.61093 12.5461 1.44402C12.3792 1.27712 12.1528 1.18335 11.9168 1.18335C11.6807 1.18335 11.4544 1.27712 11.2875 1.44402C11.1205 1.61093 11.0268 1.83731 11.0268 2.07335V2.94668C9.30029 3.1853 7.71876 4.04152 6.57513 5.35675C5.4315 6.67199 4.80327 8.35711 4.80678 10.1V13.3934C4.72382 14.5116 4.4178 15.6019 3.90678 16.6C3.44737 17.3216 2.89358 17.9785 2.26011 18.5534C2.189 18.6158 2.13201 18.6927 2.09293 18.7789C2.05384 18.8651 2.03357 18.9587 2.03345 19.0534V19.96C2.03345 20.1368 2.10369 20.3064 2.22871 20.4314C2.35373 20.5564 2.5233 20.6267 2.70011 20.6267H21.2334C21.4103 20.6267 21.5798 20.5564 21.7049 20.4314C21.8299 20.3064 21.9001 20.1368 21.9001 19.96V19.0534C21.9 18.9587 21.8797 18.8651 21.8406 18.7789C21.8016 18.6927 21.7446 18.6158 21.6734 18.5534ZM3.42011 19.2934C4.04024 18.694 4.58636 18.0226 5.04678 17.2934C5.69064 16.088 6.0659 14.7575 6.14678 13.3934V10.1C6.12034 9.31871 6.2514 8.54007 6.53214 7.81046C6.81289 7.08086 7.23759 6.41521 7.78095 5.85315C8.3243 5.2911 8.97521 4.84413 9.6949 4.53887C10.4146 4.2336 11.1884 4.07629 11.9701 4.07629C12.7519 4.07629 13.5256 4.2336 14.2453 4.53887C14.965 4.84413 15.6159 5.2911 16.1593 5.85315C16.7026 6.41521 17.1273 7.08086 17.4081 7.81046C17.6888 8.54007 17.8199 9.31871 17.7934 10.1V13.3934C17.8743 14.7575 18.2496 16.088 18.8934 17.2934C19.3539 18.0226 19.9 18.694 20.5201 19.2934H3.42011Z"
-                  fill="currentColor"
-                />
-                <path
-                  d="M12 22.8533C12.42 22.8436 12.823 22.6858 13.1378 22.4076C13.4525 22.1294 13.6588 21.7489 13.72 21.3333H10.2134C10.2764 21.7602 10.4923 22.1497 10.8209 22.4293C11.1496 22.7089 11.5686 22.8595 12 22.8533Z"
-                  fill="currentColor"
-                />
-              </g>
-              <defs>
-                <clipPath id="clip0_5_2269">
-                  <rect width={24} height={24} fill="white" />
-                </clipPath>
-              </defs>
-            </svg>
-            <p className='font-semibold'>Reminder</p>
-          </button>
+        {pathname !== "/all-tasks" &&
+          <div>
+            <button
+              className={`flex w-full gap-x-3 items-center px-3 py-3 border-b-2 border-[#35793729] hover:bg-[#35793729] ${tasks[0]?.reminder === true ? "text-green-500" : "text-current"}`}
+              onClick={() => EditTaskReminderData(taskData, tasks[0]?.reminder, dependancy, setDependancy, dep, setDep)}>
+              <svg
+                width={24}
+                height={24}
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg">
+                <g clipPath="url(#clip0_5_2269)">
+                  <path
+                    d="M21.6734 18.5534C21.0306 17.9802 20.4677 17.3232 20.0001 16.6C19.4891 15.6019 19.1831 14.5116 19.1001 13.3934V10.1C19.1045 8.34376 18.4675 6.64633 17.3086 5.32666C16.1498 4.007 14.5489 3.15592 12.8068 2.93335V2.07335C12.8068 1.83731 12.713 1.61093 12.5461 1.44402C12.3792 1.27712 12.1528 1.18335 11.9168 1.18335C11.6807 1.18335 11.4544 1.27712 11.2875 1.44402C11.1205 1.61093 11.0268 1.83731 11.0268 2.07335V2.94668C9.30029 3.1853 7.71876 4.04152 6.57513 5.35675C5.4315 6.67199 4.80327 8.35711 4.80678 10.1V13.3934C4.72382 14.5116 4.4178 15.6019 3.90678 16.6C3.44737 17.3216 2.89358 17.9785 2.26011 18.5534C2.189 18.6158 2.13201 18.6927 2.09293 18.7789C2.05384 18.8651 2.03357 18.9587 2.03345 19.0534V19.96C2.03345 20.1368 2.10369 20.3064 2.22871 20.4314C2.35373 20.5564 2.5233 20.6267 2.70011 20.6267H21.2334C21.4103 20.6267 21.5798 20.5564 21.7049 20.4314C21.8299 20.3064 21.9001 20.1368 21.9001 19.96V19.0534C21.9 18.9587 21.8797 18.8651 21.8406 18.7789C21.8016 18.6927 21.7446 18.6158 21.6734 18.5534ZM3.42011 19.2934C4.04024 18.694 4.58636 18.0226 5.04678 17.2934C5.69064 16.088 6.0659 14.7575 6.14678 13.3934V10.1C6.12034 9.31871 6.2514 8.54007 6.53214 7.81046C6.81289 7.08086 7.23759 6.41521 7.78095 5.85315C8.3243 5.2911 8.97521 4.84413 9.6949 4.53887C10.4146 4.2336 11.1884 4.07629 11.9701 4.07629C12.7519 4.07629 13.5256 4.2336 14.2453 4.53887C14.965 4.84413 15.6159 5.2911 16.1593 5.85315C16.7026 6.41521 17.1273 7.08086 17.4081 7.81046C17.6888 8.54007 17.8199 9.31871 17.7934 10.1V13.3934C17.8743 14.7575 18.2496 16.088 18.8934 17.2934C19.3539 18.0226 19.9 18.694 20.5201 19.2934H3.42011Z"
+                    fill="currentColor"
+                  />
+                  <path
+                    d="M12 22.8533C12.42 22.8436 12.823 22.6858 13.1378 22.4076C13.4525 22.1294 13.6588 21.7489 13.72 21.3333H10.2134C10.2764 21.7602 10.4923 22.1497 10.8209 22.4293C11.1496 22.7089 11.5686 22.8595 12 22.8533Z"
+                    fill="currentColor"
+                  />
+                </g>
+                <defs>
+                  <clipPath id="clip0_5_2269">
+                    <rect width={24} height={24} fill="white" />
+                  </clipPath>
+                </defs>
+              </svg>
+              <p className='font-semibold'>Reminder</p>
+            </button>
 
 
-          <button
-            className={`flex w-full gap-x-3 items-center px-[5px] py-3 border-b-2 border-[#35793729] hover:bg-[#35793729] ${tasks[0]?.reminder === true ? "text-green-500" : "text-current"}`}
-            onClick={() => setEF(true)}>
-            <svg
-              width="36px"
-              height="36px"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg">
-              <path
-                fillRule="evenodd"
-                clipRule="evenodd"
-                d="M17.7 5.12758L19.266 6.37458C19.4172 6.51691 19.5025 6.71571 19.5013 6.92339C19.5002 7.13106 19.4128 7.32892 19.26 7.46958L18.07 8.89358L14.021 13.7226C13.9501 13.8037 13.8558 13.8607 13.751 13.8856L11.651 14.3616C11.3755 14.3754 11.1356 14.1751 11.1 13.9016V11.7436C11.1071 11.6395 11.149 11.5409 11.219 11.4636L15.193 6.97058L16.557 5.34158C16.8268 4.98786 17.3204 4.89545 17.7 5.12758Z"
-                stroke="currentColor"
-                strokeWidth={1}
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-              <path
-                d="M12.033 7.61865C12.4472 7.61865 12.783 7.28287 12.783 6.86865C12.783 6.45444 12.4472 6.11865 12.033 6.11865V7.61865ZM9.23301 6.86865V6.11865L9.23121 6.11865L9.23301 6.86865ZM5.50001 10.6187H6.25001L6.25001 10.617L5.50001 10.6187ZM5.50001 16.2437L6.25001 16.2453V16.2437H5.50001ZM9.23301 19.9937L9.23121 20.7437H9.23301V19.9937ZM14.833 19.9937V20.7437L14.8348 20.7437L14.833 19.9937ZM18.566 16.2437H17.816L17.816 16.2453L18.566 16.2437ZM19.316 12.4937C19.316 12.0794 18.9802 11.7437 18.566 11.7437C18.1518 11.7437 17.816 12.0794 17.816 12.4937H19.316ZM15.8863 6.68446C15.7282 6.30159 15.2897 6.11934 14.9068 6.2774C14.5239 6.43546 14.3417 6.87397 14.4998 7.25684L15.8863 6.68446ZM18.2319 9.62197C18.6363 9.53257 18.8917 9.13222 18.8023 8.72777C18.7129 8.32332 18.3126 8.06792 17.9081 8.15733L18.2319 9.62197ZM8.30001 16.4317C7.8858 16.4317 7.55001 16.7674 7.55001 17.1817C7.55001 17.5959 7.8858 17.9317 8.30001 17.9317V16.4317ZM15.767 17.9317C16.1812 17.9317 16.517 17.5959 16.517 17.1817C16.517 16.7674 16.1812 16.4317 15.767 16.4317V17.9317ZM12.033 6.11865H9.23301V7.61865H12.033V6.11865ZM9.23121 6.11865C6.75081 6.12461 4.7447 8.13986 4.75001 10.6203L6.25001 10.617C6.24647 8.96492 7.58269 7.62262 9.23481 7.61865L9.23121 6.11865ZM4.75001 10.6187V16.2437H6.25001V10.6187H4.75001ZM4.75001 16.242C4.7447 18.7224 6.75081 20.7377 9.23121 20.7437L9.23481 19.2437C7.58269 19.2397 6.24647 17.8974 6.25001 16.2453L4.75001 16.242ZM9.23301 20.7437H14.833V19.2437H9.23301V20.7437ZM14.8348 20.7437C17.3152 20.7377 19.3213 18.7224 19.316 16.242L17.816 16.2453C17.8195 17.8974 16.4833 19.2397 14.8312 19.2437L14.8348 20.7437ZM19.316 16.2437V12.4937H17.816V16.2437H19.316ZM14.4998 7.25684C14.6947 7.72897 15.0923 8.39815 15.6866 8.91521C16.2944 9.44412 17.1679 9.85718 18.2319 9.62197L17.9081 8.15733C17.4431 8.26012 17.0391 8.10369 16.6712 7.7836C16.2897 7.45165 16.0134 6.99233 15.8863 6.68446L14.4998 7.25684ZM8.30001 17.9317H15.767V16.4317H8.30001V17.9317Z"
-                fill="currentColor"
-              />
-            </svg>
-            <p className='font-semibold'>Edit</p>
-          </button>
-        </div>
+            <button
+              className="flex w-full gap-x-3 items-center px-[5px] py-3 border-b-2 border-[#35793729] hover:bg-[#35793729]"
+              onClick={() => setEF(true)}>
+              <svg
+                width="36px"
+                height="36px"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg">
+                <path
+                  fillRule="evenodd"
+                  clipRule="evenodd"
+                  d="M17.7 5.12758L19.266 6.37458C19.4172 6.51691 19.5025 6.71571 19.5013 6.92339C19.5002 7.13106 19.4128 7.32892 19.26 7.46958L18.07 8.89358L14.021 13.7226C13.9501 13.8037 13.8558 13.8607 13.751 13.8856L11.651 14.3616C11.3755 14.3754 11.1356 14.1751 11.1 13.9016V11.7436C11.1071 11.6395 11.149 11.5409 11.219 11.4636L15.193 6.97058L16.557 5.34158C16.8268 4.98786 17.3204 4.89545 17.7 5.12758Z"
+                  stroke="currentColor"
+                  strokeWidth={1}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <path
+                  d="M12.033 7.61865C12.4472 7.61865 12.783 7.28287 12.783 6.86865C12.783 6.45444 12.4472 6.11865 12.033 6.11865V7.61865ZM9.23301 6.86865V6.11865L9.23121 6.11865L9.23301 6.86865ZM5.50001 10.6187H6.25001L6.25001 10.617L5.50001 10.6187ZM5.50001 16.2437L6.25001 16.2453V16.2437H5.50001ZM9.23301 19.9937L9.23121 20.7437H9.23301V19.9937ZM14.833 19.9937V20.7437L14.8348 20.7437L14.833 19.9937ZM18.566 16.2437H17.816L17.816 16.2453L18.566 16.2437ZM19.316 12.4937C19.316 12.0794 18.9802 11.7437 18.566 11.7437C18.1518 11.7437 17.816 12.0794 17.816 12.4937H19.316ZM15.8863 6.68446C15.7282 6.30159 15.2897 6.11934 14.9068 6.2774C14.5239 6.43546 14.3417 6.87397 14.4998 7.25684L15.8863 6.68446ZM18.2319 9.62197C18.6363 9.53257 18.8917 9.13222 18.8023 8.72777C18.7129 8.32332 18.3126 8.06792 17.9081 8.15733L18.2319 9.62197ZM8.30001 16.4317C7.8858 16.4317 7.55001 16.7674 7.55001 17.1817C7.55001 17.5959 7.8858 17.9317 8.30001 17.9317V16.4317ZM15.767 17.9317C16.1812 17.9317 16.517 17.5959 16.517 17.1817C16.517 16.7674 16.1812 16.4317 15.767 16.4317V17.9317ZM12.033 6.11865H9.23301V7.61865H12.033V6.11865ZM9.23121 6.11865C6.75081 6.12461 4.7447 8.13986 4.75001 10.6203L6.25001 10.617C6.24647 8.96492 7.58269 7.62262 9.23481 7.61865L9.23121 6.11865ZM4.75001 10.6187V16.2437H6.25001V10.6187H4.75001ZM4.75001 16.242C4.7447 18.7224 6.75081 20.7377 9.23121 20.7437L9.23481 19.2437C7.58269 19.2397 6.24647 17.8974 6.25001 16.2453L4.75001 16.242ZM9.23301 20.7437H14.833V19.2437H9.23301V20.7437ZM14.8348 20.7437C17.3152 20.7377 19.3213 18.7224 19.316 16.242L17.816 16.2453C17.8195 17.8974 16.4833 19.2397 14.8312 19.2437L14.8348 20.7437ZM19.316 16.2437V12.4937H17.816V16.2437H19.316ZM14.4998 7.25684C14.6947 7.72897 15.0923 8.39815 15.6866 8.91521C16.2944 9.44412 17.1679 9.85718 18.2319 9.62197L17.9081 8.15733C17.4431 8.26012 17.0391 8.10369 16.6712 7.7836C16.2897 7.45165 16.0134 6.99233 15.8863 6.68446L14.4998 7.25684ZM8.30001 17.9317H15.767V16.4317H8.30001V17.9317Z"
+                  fill="currentColor"
+                />
+              </svg>
+              <p className='font-semibold'>Edit</p>
+            </button>
+          </div>
+        }
       </div>
 
-
-      <div className='flex justify-between py-3'>
+      <div className='flex justify-between items-end w-full h-full px-2 py-7'>
         <button onClick={() => setTaskModal(false)}>
           <svg
             width={14}
@@ -389,19 +392,22 @@ function TaskModal({ setTaskModal, taskId, dependancy, setDependancy, setEF }: {
             />
           </svg>
         </button>
-        <button onClick={() => DeleteTaskData(taskId, dependancy, setDependancy, setTaskModal)}>
-          <svg
-            width={19}
-            height={20}
-            viewBox="0 0 24 27"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg">
-            <path
-              d="M5.02666 26.6417C4.25888 26.6417 3.61832 26.385 3.10499 25.8717C2.59166 25.3583 2.33443 24.7172 2.33332 23.9483V3.30834H0.666656V1.64167H7.33332V0.358337H17.3333V1.64167H24V3.30834H22.3333V23.95C22.3333 24.7167 22.0767 25.3572 21.5633 25.8717C21.05 26.3861 20.4089 26.6428 19.64 26.6417H5.02666ZM8.67999 21.6417H10.3467V6.64167H8.67999V21.6417ZM14.32 21.6417H15.9867V6.64167H14.32V21.6417Z"
-              fill="currentColor"
-            />
-          </svg>
-        </button>
+
+        {pathname !== "/all-tasks" &&
+          <button onClick={() => DeleteTaskData(taskData?._id, dependancy, setDependancy, setTaskModal)}>
+            <svg
+              width={19}
+              height={20}
+              viewBox="0 0 24 27"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M5.02666 26.6417C4.25888 26.6417 3.61832 26.385 3.10499 25.8717C2.59166 25.3583 2.33443 24.7172 2.33332 23.9483V3.30834H0.666656V1.64167H7.33332V0.358337H17.3333V1.64167H24V3.30834H22.3333V23.95C22.3333 24.7167 22.0767 25.3572 21.5633 25.8717C21.05 26.3861 20.4089 26.6428 19.64 26.6417H5.02666ZM8.67999 21.6417H10.3467V6.64167H8.67999V21.6417ZM14.32 21.6417H15.9867V6.64167H14.32V21.6417Z"
+                fill="currentColor"
+              />
+            </svg>
+          </button>
+        }
       </div>
     </div>
   )

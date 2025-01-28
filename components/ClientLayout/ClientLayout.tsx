@@ -6,12 +6,13 @@ import { getCookie } from 'cookies-next';
 import { useRouter } from 'next/navigation';
 import Sidebar from '../Sidebar/Sidebar';
 import Topbar from '../Topbar/Topbar';
+import Footer from '../Footer/Footer';
 
 type UserDataType = [{
     name: string,
     email: string,
     password: string
-  }]
+}]
 
 function ClientLayout({ children }: { children: React.ReactNode }) {
     const router = useRouter();
@@ -34,17 +35,20 @@ function ClientLayout({ children }: { children: React.ReactNode }) {
     }, [isPresent]);
 
     return (
-        <div className='w-full h-[100vh]'>
+        <div className='w-full h-full'>
             <Toaster />
             {isPresent === true &&
                 <Topbar />
             }
-            <div className='flex'>
+            <div className='flex w-full min-h-[100vh]'>
                 {isPresent === true &&
-                    <Sidebar user={user}/>
+                    <Sidebar user={user} />
                 }
                 {children}
             </div>
+            {isPresent === true &&
+                <Footer />
+            }
         </div>
     )
 }

@@ -9,15 +9,15 @@ type TasksDataType = [{
   taskName: string,
   date: string,
   steps: [string],
-  notes: string,
   important: boolean,
   reminder: boolean,
   status: boolean,
 }]
 
-async function ViewSpecificTaskData(id: string, setTasks: React.Dispatch<React.SetStateAction<any[] | TasksDataType>>) {
+
+async function ViewSpecificTaskData(id: string | undefined, setTasks: React.Dispatch<React.SetStateAction<any[] | TasksDataType>>) {
   try {
-    const response = await fetch("/api/view-specific-tasks", {
+    const response = await fetch("/api/view-specific-tasks-data", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -35,32 +35,55 @@ async function ViewSpecificTaskData(id: string, setTasks: React.Dispatch<React.S
     console.log("Cannot Proceed To View Task Data Due To :-", errors);
   }
 }
-function EditTask({taskId , setEF}:{taskId:string, setEF:React.Dispatch<React.SetStateAction<boolean>>}) {
-  const [tasks, setTasks] = useState< TasksDataType | any[]>([]);
-  useEffect(()=>{
-    ViewSpecificTaskData(taskId, setTasks);
-  },[])
-  const form = useForm< TasksDataType[0]>({
+async function EditTaskStepsData(data: TasksDataType[0], dependancy: boolean, setDependancy: React.Dispatch<React.SetStateAction<boolean>>, setTaskModal: React.Dispatch<React.SetStateAction<boolean>>,  setEF: React.Dispatch<React.SetStateAction<boolean>>) {
+
+  try {
+    const response = await fetch("/api/edit-tasks", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(data)
+    });
+
+    const resData = await response.json();
+    if (resData?.status === 200) {
+      setDependancy(dependancy === false ? true : false);
+      setTaskModal(false);
+      setEF(false);
+    } else {
+      console.log(resData?.message);
+    }
+  } catch (errors) {
+    console.log("Cannot Proceed To Edit Task Data Due To :-", errors);
+  }
+}
+
+function EditTask({ taskData, setEF, dependancy, setDependancy, setTaskModal }: { taskData: TasksDataType[0] | undefined, setEF: React.Dispatch<React.SetStateAction<boolean>>, dependancy:boolean, setDependancy: React.Dispatch<React.SetStateAction<boolean>>, setTaskModal: React.Dispatch<React.SetStateAction<boolean>> }) {
+  const [tasks, setTasks] = useState<TasksDataType | any[]>([]);
+  useEffect(() => {
+    ViewSpecificTaskData(taskData?._id, setTasks);
+  }, [])
+  const form = useForm<TasksDataType[0]>({
     defaultValues: {
-      _id: taskId,
-      taskName: tasks[0]?.taskName,
-      date: tasks[0]?.date,
+      _id: taskData?._id,
+      taskName: taskData?.taskName,
+      date: taskData?.date,
     }
   });
 
   const { register, handleSubmit, formState: { errors } } = form;
   return (
     <form
-      onSubmit={handleSubmit((data) => console.log(data))}
+      onSubmit={handleSubmit((data) =>EditTaskStepsData(data,dependancy, setDependancy, setTaskModal, setEF))}
       className='grid border-2 border-gray-300 p-2'>
-        <button onClick={()=>console.log(tasks)}>test</button>
       <label htmlFor="text">Enter Task Name</label>
       <input type="text"
         {...register("taskName", { required: true })}
         className='border-2 border-gray-300 p-1' />
       {errors?.taskName && <p className='text-[12px] text-red-500'>Task Name Is Required</p>}
 
-      <label htmlFor="date">date Password</label>
+      <label htmlFor="date">Enter Date</label>
       <input
         type="date"
         {...register("date", { required: true })}

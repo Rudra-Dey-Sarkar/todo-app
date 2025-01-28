@@ -92,9 +92,9 @@ async function EditTaskStatusData(id: string, status: boolean, dependancy: boole
         console.log("Cannot Proceed To Edit Task Data Due To :-", errors);
     }
 }
-function ControlTaskModal(taskModal: boolean, setTaskModal: React.Dispatch<React.SetStateAction<boolean>>, id: string, setTaskId: React.Dispatch<React.SetStateAction<string>>) {
-    if (taskModal === false) {
-        setTaskId(id);
+function ControlTaskModal(taskModal: boolean, setTaskModal: React.Dispatch<React.SetStateAction<boolean>>, task: TasksDataType[0], taskData:TasksDataType[0] | undefined ,setTaskData:  React.Dispatch<React.SetStateAction<TasksDataType[0] | undefined>>) {
+    if (taskModal === false && task !== undefined) {
+        setTaskData(task);
         setTaskModal(true);
     } else {
         setTaskModal(false);
@@ -106,7 +106,7 @@ function Today() {
     const [EF, setEF] = useState<boolean>(false);
     const [dependancy, setDependancy] = useState<boolean>(false);
     const [taskModal, setTaskModal] = useState<boolean>(false);
-    const [taskId, setTaskId] = useState<string>("");
+    const [taskData, setTaskData] = useState<TasksDataType[0] | undefined>(undefined);
     const [tasks, setTasks] = useState<TasksDataType | any[]>([]);
     const [user, setUser] = useState<UserDataType | any[]>([]);
     const { isPresent, setIsPresent }: any = useContext(GlobalContext);
@@ -126,7 +126,7 @@ function Today() {
     }, [isPresent, AF, dependancy]);
 
     return (
-        <div className='w-full'>
+        <div className='w-full h-full'>
 
             {AF === true &&
                 <div
@@ -146,7 +146,7 @@ function Today() {
                     <div
                         className='bg-white p-5 rounded-md shadow-lg'
                         onClick={(e) => e.stopPropagation()}>
-                        <EditTask taskId={taskId} setEF={setEF} />
+                        <EditTask taskData={taskData}  setEF={setEF} dependancy={dependancy} setDependancy={setDependancy} setTaskModal={setTaskModal}  />
                     </div>
                 </div>
             }
@@ -200,7 +200,7 @@ function Today() {
             </div>
 
             {tasks.length > 0 ?
-                <div className='flex'>
+                <div className='flex w-full h-full'>
                     <div className='px-3 w-full h-full'>
                         {/* Progressing Tasks */}
                         <p className='text-[1.2rem] font-semibold border-b-2 border-gray-300 mb-3'>Progressing Task :-</p>
@@ -257,7 +257,7 @@ function Today() {
                                                     </svg>}
                                             </button>
                                             <p className='w-full h-full py-3 hover:cursor-pointer'
-                                                onClick={() => ControlTaskModal(taskModal, setTaskModal, task._id, setTaskId)}>{task?.taskName}</p>
+                                                onClick={() => ControlTaskModal(taskModal, setTaskModal, task,  taskData ,setTaskData)}>{task?.taskName}</p>
                                         </div>
                                         <button onClick={() => EditTaskImportantData(task?._id, task?.important, dependancy, setDependancy)}>
                                             {task?.important === false ?
@@ -344,7 +344,7 @@ function Today() {
                                                     </svg>}
                                             </button>
                                             <p className='w-full h-full py-3 hover:cursor-pointer'
-                                                onClick={() => ControlTaskModal(taskModal, setTaskModal, task._id, setTaskId)}>{task?.taskName}</p>
+                                                onClick={() => ControlTaskModal(taskModal, setTaskModal, task,  taskData ,setTaskData)}>{task?.taskName}</p>
                                         </div>
                                         <button onClick={() => EditTaskImportantData(task?._id, task?.important, dependancy, setDependancy)}>
                                             {task?.important === false ?
@@ -376,7 +376,7 @@ function Today() {
                             </div>)}
                     </div>
                     {taskModal === true &&
-                        <TaskModal setTaskModal={setTaskModal} taskId={taskId} dependancy={dependancy} setDependancy={setDependancy} setEF={setEF} />
+                        <TaskModal setTaskModal={setTaskModal} taskData={taskData} dependancy={dependancy} setDependancy={setDependancy} setEF={setEF} />
                     }
                 </div>
                 :

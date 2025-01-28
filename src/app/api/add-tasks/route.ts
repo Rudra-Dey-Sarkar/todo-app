@@ -3,12 +3,10 @@ import { NextRequest, NextResponse } from "next/server"
 import mongoose from "mongoose"
 
 const tasksSchema = new mongoose.Schema({
-    _id: String,
     userId: String,
     taskName: String,
     date: String,
     steps: [String],
-    notes:String,
     important: { type: Boolean, default: false },
     reminder: { type: Boolean, default: false },
     status: { type: Boolean, default: false },

@@ -14,7 +14,6 @@ type TaskDataType = {
   taskName: string,
   date: string,
   steps: [string],
-  notes: string,
   important: boolean,
   reminder: boolean,
   status: boolean,
@@ -65,7 +64,7 @@ function AddTask({user, setAF}:{user:UserDataType | any[], setAF:React.Dispatch<
         className='border-2 border-gray-300 p-1' />
       {errors?.taskName && <p className='text-[12px] text-red-500'>Task Name Is Required</p>}
 
-      <label htmlFor="date">date Password</label>
+      <label htmlFor="date">Enter Password</label>
       <input
         type="date"
         {...register("date", { required: true })}

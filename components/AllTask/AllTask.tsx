@@ -58,9 +58,9 @@ async function ViewTaskData(userId: string, setTasks: React.Dispatch<React.SetSt
         console.log("Cannot Proceed To View Task Data Due To :-", errors);
     }
 }
-function ControlTaskModal(taskModal: boolean, setTaskModal: React.Dispatch<React.SetStateAction<boolean>>, id: string, setTaskId: React.Dispatch<React.SetStateAction<string>>) {
-    if (taskModal === false) {
-        setTaskId(id);
+function ControlTaskModal(taskModal: boolean, setTaskModal: React.Dispatch<React.SetStateAction<boolean>>, task: TasksDataType[0], taskData:TasksDataType[0] | undefined ,setTaskData:  React.Dispatch<React.SetStateAction<TasksDataType[0] | undefined>>) {
+    if (taskModal === false && task !== undefined) {
+        setTaskData(task);
         setTaskModal(true);
     } else {
         setTaskModal(false);
@@ -72,7 +72,7 @@ function AllTasks() {
     const [dependancy, setDependancy] = useState<boolean>(false);
     const [taskModal, setTaskModal] = useState<boolean>(false);
     const [EF, setEF] = useState<boolean>(false);
-    const [taskId, setTaskId] = useState<string>("");
+    const [taskData, setTaskData] = useState<TasksDataType[0] | undefined>(undefined);
     const [tasks, setTasks] = useState<AdvanceTaskDataType | any[]>([]);
     const [user, setUser] = useState<UserDataType | any[]>([]);
     const { isPresent, setIsPresent }: any = useContext(GlobalContext);
@@ -197,7 +197,7 @@ function AllTasks() {
                                                         </svg>}
                                                 </button>
                                                 <p className='w-full h-full py-3 hover:cursor-pointer'
-                                                    onClick={() => ControlTaskModal(taskModal, setTaskModal, t._id, setTaskId)}>{t?.taskName}</p>
+                                                    onClick={() =>ControlTaskModal(taskModal, setTaskModal, t,  taskData ,setTaskData)}>{t?.taskName}</p>
                                             </div>
                                             <button>
                                                 {t?.important === false ?
@@ -231,7 +231,7 @@ function AllTasks() {
                             </div>)}
                     </div>
                     {taskModal === true &&
-                        <TaskModal setTaskModal={setTaskModal} taskId={taskId} dependancy={dependancy} setDependancy={setDependancy} setEF={setEF} />
+                        <TaskModal setTaskModal={setTaskModal} taskData={taskData} dependancy={dependancy} setDependancy={setDependancy} setEF={setEF} />
                     }
                 </div>
                 :
