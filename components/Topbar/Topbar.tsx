@@ -17,9 +17,9 @@ function Topbar() {
         <div
           className='grid gap-y-1 w-fit h-fit hover:cursor-pointer'
           onClick={() => ControlSidebar(sidebar, setSidebar)}>
-          <div className={`w-7 h-[3px] bg-black rounded-full ${sidebar===false ? "duration-300 ease-in-out transform translate-y-[10px] rotate-[-45deg]": "duration-300 ease-in-out transform translate-y-[0px] rotate-[0deg]"}`}></div>
-          <div className={`w-7 h-[3px] bg-black rounded-full ${sidebar===false ? "opacity-0": "opacity-100"}`}></div>
-          <div className={`w-7 h-[3px] bg-black rounded-full ${sidebar===false ? "duration-300 ease-in-out transform translate-y-[-5px] rotate-[45deg]": "duration-300 ease-in-out transform translate-y-[0px] rotate-[0deg]"}`}></div>
+          <div className={`w-7 h-[3px] bg-black rounded-full ${sidebar===false ? "duration-300 ease-in-out transform translate-y-[0px] rotate-[0deg]": "duration-300 ease-in-out transform translate-y-[10px] rotate-[-45deg]  "}`}></div>
+          <div className={`w-7 h-[3px] bg-black rounded-full ${sidebar===false ? "opacity-100": "opacity-0"}`}></div>
+          <div className={`w-7 h-[3px] bg-black rounded-full ${sidebar===false ? "duration-300 ease-in-out transform translate-y-[0px] rotate-[0deg]": "duration-300 ease-in-out transform translate-y-[-5px] rotate-[45deg]  "}`}></div>
         </div>
 
         <div className='flex items-center'>

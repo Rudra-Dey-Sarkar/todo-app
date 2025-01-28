@@ -7,7 +7,7 @@ const GlobalContext = createContext< any | undefined>(undefined);
 const GlobalContextWrapper = ({children}:any)=> {
     const [isActive, setIsActive] = useState<boolean>(false);
     const [isPresent, setIsPresent] = useState<boolean>(false);
-    const [sidebar, setSidebar] = useState<boolean>(true);
+    const [sidebar, setSidebar] = useState<boolean>(false);
 
     useEffect(() => {
 
