@@ -185,7 +185,7 @@ function TaskModal({ setTaskModal, taskData, dependancy, setDependancy, setEF }:
         <div className='flex justify-between w-full h-fit px-3 border-b-2 border-[#35793729] hover:bg-[#35793729]'>
           <div className='flex justify-between gap-x-3 w-full h-full'>
             <button
-              disabled={pathname === "/all-tasks"}
+              disabled={pathname === "/all-tasks" || pathname ==="/important"}
               onClick={() => EditTaskStatusData(tasks[0]?._id, tasks[0]?.status, dependancy, setDependancy, dep, setDep)}>
               {tasks[0]?.status === false ?
                 <svg
@@ -235,7 +235,7 @@ function TaskModal({ setTaskModal, taskData, dependancy, setDependancy, setEF }:
             <p className='w-full h-full py-3 hover:cursor-pointer'>{tasks[0]?.taskName}</p>
           </div>
           <button
-            disabled={pathname === "/all-tasks"}
+            disabled={pathname === "/all-tasks" || pathname ==="/important"}
             onClick={() => EditTaskImportantData(tasks[0]?._id, tasks[0]?.important, dependancy, setDependancy, dep, setDep)}>
             {tasks[0]?.important === false ?
               <svg
@@ -264,7 +264,7 @@ function TaskModal({ setTaskModal, taskData, dependancy, setDependancy, setEF }:
         </div>
 
         <div className='grid gap-y-2'>
-          {pathname !== "/all-tasks" &&
+          {(pathname !== "/all-tasks") && (pathname !== "/important") &&
             <button
               className='flex w-full gap-x-3 items-center px-3 py-3 border-b-2 border-[#35793729] hover:bg-[#35793729]'
               onClick={() => ControlAddStep(addStep, setAddStep)}>
@@ -291,7 +291,7 @@ function TaskModal({ setTaskModal, taskData, dependancy, setDependancy, setEF }:
                   type="text"
                   placeholder='Open computer'
                   {...register("steps", { required: true })}
-                  className='p-1 my-1' />
+                  className='p-1 my-1 w-full' />
                 <button
                   type='submit'
                   className='border-2 border-gray-500 w-fit h-fit py-1 px-4 m-auto rounded-[5px]'>Add</button>
@@ -318,7 +318,7 @@ function TaskModal({ setTaskModal, taskData, dependancy, setDependancy, setEF }:
           </div>
         </div>
 
-        {pathname !== "/all-tasks" &&
+        {(pathname !== "/all-tasks") && (pathname !== "/important") &&
           <div>
             <button
               className={`flex w-full gap-x-3 items-center px-3 py-3 border-b-2 border-[#35793729] hover:bg-[#35793729] ${tasks[0]?.reminder === true ? "text-green-500" : "text-current"}`}
@@ -393,7 +393,7 @@ function TaskModal({ setTaskModal, taskData, dependancy, setDependancy, setEF }:
           </svg>
         </button>
 
-        {pathname !== "/all-tasks" &&
+        {(pathname !== "/all-tasks") && (pathname !== "/important") &&
           <button onClick={() => DeleteTaskData(taskData?._id, dependancy, setDependancy, setTaskModal)}>
             <svg
               width={19}

@@ -1,6 +1,5 @@
 "use client"
 import React, { useState, useEffect, useContext } from 'react'
-import AddTask from '../AddTask/AddTask'
 import { GlobalContext } from '../../GlobalContext/GlobalContext';
 import { getCookie } from 'cookies-next';
 import TaskModal from '../TaskModal/TaskModal';
