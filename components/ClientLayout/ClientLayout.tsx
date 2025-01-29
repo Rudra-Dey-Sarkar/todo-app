@@ -9,6 +9,7 @@ import Topbar from '../Topbar/Topbar';
 import Footer from '../Footer/Footer';
 
 type UserDataType = [{
+    picUrl: string,
     name: string,
     email: string,
     password: string
@@ -25,6 +26,7 @@ function ClientLayout({ children }: { children: React.ReactNode }) {
         if (cookies !== undefined && typeof cookies === "string") {
             const userCookieData = JSON.parse(cookies);
             setIsPresent(true);
+            console.log(userCookieData);
             setUser(userCookieData);
             router.push("/today");
         } else {

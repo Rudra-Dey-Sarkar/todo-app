@@ -4,7 +4,9 @@ import { usePathname } from 'next/navigation'
 import { GlobalContext } from '../../GlobalContext/GlobalContext'
 import { deleteCookie } from 'cookies-next'
 
+
 type UserDataType = [{
+  picUrl: string,
   name: string,
   email: string,
   password: string
@@ -38,7 +40,7 @@ function Sidebar({ user }: { user: UserDataType | any[] }) {
           <div className='flex justify-center w-full h-fit bg-[#EEF6EF] '>
             <div className='mt-7 absolute inset-0 w-full h-fit'>
               <img
-                src="#"
+                src={user.length > 0 ? user[0].picUrl : "#"}
                 alt="picture"
                 className='mx-auto p-1 w-[70px] h-[70px] rounded-full border-2 border-gray-500'
                 onClick={() => ControlOptions(options, setOptions)} />

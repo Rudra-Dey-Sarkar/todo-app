@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 import ConnectDB from "../../../../actions/db";
 
 const usersSchema = new mongoose.Schema({
+    picUrl:String,
     name: String,
     email: String,
     password: String
@@ -15,8 +16,8 @@ const userModel = mongoose.models.users || mongoose.model("users", usersSchema);
 export const POST = async (req: NextRequest) => {
     ConnectDB();
     const data = await req.json();
-    
     const allData = {
+        picUrl: data.picUrl,
         name: data.name,
         email: data.email,
         password: data.password

@@ -286,7 +286,7 @@ function TaskModal({ setTaskModal, taskData, dependancy, setDependancy, setEF }:
           {addStep === true &&
             <form onSubmit={handleSubmit((data) => EditTaskStepsData(data, dependancy, setDependancy, dep, setDep, setAddStep))}>
               <label htmlFor="steps">Enter Steps :-</label>
-              <div className='flex justify-between'>
+              <div className='grid justify-center sm:flex sm:justify-between '>
                 <input
                   type="text"
                   placeholder='Open computer'
@@ -294,7 +294,7 @@ function TaskModal({ setTaskModal, taskData, dependancy, setDependancy, setEF }:
                   className='p-1 my-1' />
                 <button
                   type='submit'
-                  className='font-semibold'>Add</button>
+                  className='border-2 border-gray-500 w-fit h-fit py-1 px-4 m-auto rounded-[5px]'>Add</button>
               </div>
               {errors?.steps && <p className='text-[12px] text-red-500'>Step is required</p>}
             </form>

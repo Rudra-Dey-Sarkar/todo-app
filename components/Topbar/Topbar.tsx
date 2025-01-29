@@ -1,6 +1,8 @@
 import React, { useContext } from 'react'
 import { GlobalContext } from '../../GlobalContext/GlobalContext'
 
+
+
 function ControlSidebar(sidebar: boolean, setSidebar: any) {
   if (sidebar === true) {
     setSidebar(false);
@@ -10,9 +12,11 @@ function ControlSidebar(sidebar: boolean, setSidebar: any) {
 }
 
 function Topbar() {
+
   const { sidebar, setSidebar }: any = useContext(GlobalContext);
   return (
     <div className='flex justify-between items-center px-2 py-2'>
+
       <div className='flex items-center gap-x-2'>
         <div
           className='grid gap-y-1 w-fit h-fit hover:cursor-pointer'
