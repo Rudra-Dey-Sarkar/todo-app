@@ -42,19 +42,19 @@ function Sidebar({ user }: { user: UserDataType | any[] }) {
               <img
                 src={user.length > 0 ? user[0].picUrl : "#"}
                 alt="picture"
-                className='mx-auto p-1 w-[70px] h-[70px] rounded-full border-2 border-gray-500'
+                className='mx-auto p-1 w-[70px] h-[70px] rounded-full border-2 border-gray-500 hover:scale-110 hover:cursor-pointer'
                 onClick={() => ControlOptions(options, setOptions)} />
 
               {options === true &&
                 <div className='bg-white grid'>
                   <Link href="/profile" className='px-2 py-3 hover:bg-[#35793729]'>
-                    <p className='text-start'>My Profile</p>
+                    <p className='text-start font-semibold'>My Profile</p>
                   </Link>
 
                   <button
                     className='px-2 py-3 hover:bg-[#35793729]'
                     onClick={() => Logout(setIsPresent)}>
-                    <p className='text-start'>Logout</p>
+                    <p className='text-start font-semibold'>Logout</p>
                   </button>
                 </div>
               }
