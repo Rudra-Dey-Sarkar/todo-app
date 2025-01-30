@@ -42,7 +42,7 @@ function Sidebar({ user }: { user: UserDataType | any[] }) {
               <img
                 src={user.length > 0 ? user[0].picUrl : "#"}
                 alt="picture"
-                className='mx-auto p-1 w-[70px] h-[70px] rounded-full border-2 border-gray-500 hover:scale-110 hover:cursor-pointer'
+                className='mx-auto p-1 w-[70px] h-[70px] border-2 border-gray-500 hover:scale-110 hover:cursor-pointer'
                 onClick={() => ControlOptions(options, setOptions)} />
 
               {options === true &&

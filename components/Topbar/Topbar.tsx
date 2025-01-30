@@ -161,7 +161,7 @@ function Topbar() {
               />
             </g>
           </svg>
-          <p className='text-[#3F9142] font-bold text-[1.5rem]'>GoalFocusMind</p>
+          <p className='text-[#3F9142] font-bold text-[1.5rem]'>GoalFocusedMind</p>
         </div>
       </div>
 

@@ -145,7 +145,7 @@ function Main() {
               />
             </g>
           </svg>
-          <p className='text-[#3F9142] font-bold text-[2rem]'>GoalFocusMind</p>
+          <p className='text-[#3F9142] font-bold text-[2rem]'>GoalFocusedMind</p>
         </div>
         <p className='font-semibold'>Plan smarter, work better, stay productive!</p>
         <div className='grid justify-center items-center gap-y-5 w-fit h-fit m-auto bg-[#EEF6EF] p-5 '>

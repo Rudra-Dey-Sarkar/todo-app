@@ -15,8 +15,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "GoalFocusMind",
-  description: "GoalFocusMind is a task tracking application that you can use to plan smarter, work better, and stay productive!",
+  title: "GoalFocusedMind",
+  description: "GoalFocusedMind is a task tracking application that you can use to plan smarter, work better, and stay productive!",
 };
 
 export default function RootLayout({
