@@ -106,7 +106,7 @@ function AllTasks() {
                                 {task[1]?.map((t: TasksDataType[0], ind: number) =>
                                     <div
                                         key={ind}>
-                                        <div className='flex justify-between px-3 border-b-2 border-[#35793729] hover:bg-[#35793729]'>
+                                        <div className={`flex justify-between px-3 border-b-2 ${isDarkMode===true ? "border-[#02540a] hover:bg-gradient-to-b from-[#3579371A] to-[#02540a]" : "border-[#35793729] hover:bg-[#35793729]"} `}>
                                             <div className='flex justify-between gap-x-3  w-full h-full'>
                                                 <button>
                                                     {t?.status === false ?

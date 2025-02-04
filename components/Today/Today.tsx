@@ -164,7 +164,7 @@ function Today() {
                             <div
                                 key={index}>
                                 {(task?.status === false && task?.date === formattedDate) &&
-                                    <div className='flex justify-between px-3 border-b-2 border-[#35793729] hover:bg-[#35793729]'>
+                                    <div className={`flex justify-between px-3 border-b-2 ${isDarkMode===true ? "border-[#02540a] hover:bg-gradient-to-b from-[#3579371A] to-[#02540a]" : "border-[#35793729] hover:bg-[#35793729]"} `}>
                                         <div className='flex justify-between gap-x-3 w-full h-full'>
                                             <button onClick={() => EditTaskStatusData(task?._id, task?.status, dependancy, setDependancy)}>
                                                 {task?.status === false ?
@@ -250,7 +250,7 @@ function Today() {
                             <div
                                 key={index}>
                                 {(task?.status === true && task?.date === formattedDate) &&
-                                    <div className='flex justify-between px-3 border-b-2 border-[#35793729] hover:bg-[#35793729]'>
+                                    <div className={`flex justify-between px-3 border-b-2 ${isDarkMode===true ? "border-[#02540a] hover:bg-gradient-to-b from-[#3579371A] to-[#02540a]" : "border-[#35793729] hover:bg-[#35793729]"} `}>
                                         <div className='flex justify-between gap-x-3 w-full h-full'>
                                             <button onClick={() => EditTaskStatusData(task?._id, task?.status, dependancy, setDependancy)}>
                                                 {task?.status === true ?
