@@ -289,6 +289,7 @@ function TaskModal({ setTaskModal, taskData, dependancy, setDependancy, setEF }:
             <form onSubmit={handleSubmit((data) => EditTaskStepsData(data, dependancy, setDependancy, dep, setDep, setAddStep))}>
               <label htmlFor="steps">Enter Steps :-</label>
               <div className='grid justify-center sm:flex sm:justify-between '>
+                
                 <input
                   type="text"
                   placeholder='Open computer'
