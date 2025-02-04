@@ -293,7 +293,7 @@ function TaskModal({ setTaskModal, taskData, dependancy, setDependancy, setEF }:
                   type="text"
                   placeholder='Open computer'
                   {...register("steps", { required: true })}
-                  className='p-1 my-1 w-full' />
+                  className='p-1 my-1 w-full text-black' />
                 <button
                   type='submit'
                   className='border-2 border-gray-500 w-fit h-fit py-1 px-4 m-auto rounded-[5px]'>Add</button>
@@ -302,7 +302,7 @@ function TaskModal({ setTaskModal, taskData, dependancy, setDependancy, setEF }:
             </form>
           }
 
-          <div className='bg-white p-2 max-h-[100px] overflow-y-auto'>
+          <div className='bg-white text-black p-2 max-h-[100px] overflow-y-auto'>
             <p className='mb-3 font-semibold border-b-2 border-gray-500'>Task Steps :-</p>
             {tasks?.map((task: TasksDataType[0], index: number) =>
               <div key={index}>
