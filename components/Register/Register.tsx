@@ -49,7 +49,6 @@ async function RegisterUser(data: UserDataType, setIsActive: any, setIsPresent: 
     toast.error("Please Fill All The Fields");
   }
 }
-
 function Register() {
   const { isActive, setIsActive }: any = useContext(GlobalContext);
   const { isPresent, setIsPresent }: any = useContext(GlobalContext);
