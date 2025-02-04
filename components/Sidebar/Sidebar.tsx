@@ -47,7 +47,7 @@ function Sidebar({ user }: { user: UserDataType | any[] }) {
                 onClick={() => ControlOptions(options, setOptions)} />
 
               {options === true &&
-                <div className={`bg-white ${isDarkMode===true?"text-black":"text-white"} grid mt-2`}>
+                <div className={`bg-white text-black grid mt-2`}>
                   <Link href="/profile" className='px-2 py-3 hover:bg-[#35793729]'>
                     <p className='text-start font-semibold'>My Profile</p>
                   </Link>
