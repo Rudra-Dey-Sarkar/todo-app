@@ -28,21 +28,22 @@ function Logout(setIsPresent: any) {
 function Sidebar({ user }: { user: UserDataType | any[] }) {
   const pathname = usePathname();
   const { isPresent, setIsPresent }: any = useContext(GlobalContext);
-  const [options, setOptions] = useState<boolean>(false);
   const { sidebar, setSidebar }: any = useContext(GlobalContext);
+  const { isDarkMode, setIsDarkMode }: any = useContext(GlobalContext);
+  const [options, setOptions] = useState<boolean>(false);
 
   return (
-    <div className="w-fit bg-white min-h-[100vh] sm:relative absolute">
+    <div className={`w-fit ${isDarkMode===true?"bg-black":"bg-white"}  min-h-[100vh] sm:relative absolute`}>
       <div className={`grid  ${sidebar === true ? "relative" : "hidden"} pt-[60px] w-[230px] sm:h-full min-h-[100vh]`} >
 
-        <div className="bg-[#EEF6EF] w-full h-full px-3" >
+        <div className={`${isDarkMode===true ? "bg-gradient-to-b from-[#45ff4b00] to-[#02540a] " : "bg-[#EEF6EF] "} w-full h-full px-3`} >
 
-          <div className='flex justify-center w-full h-fit bg-[#EEF6EF] '>
+          <div className={`flex justify-center w-full h-fit ${isDarkMode===true ? " text-white" : " text-black"}`} >
             <div className='mt-7 absolute inset-0 w-full h-fit'>
               <img
                 src={user.length > 0 ? user[0].picUrl : "#"}
                 alt="picture"
-                className='mx-auto p-1 w-[70px] h-[70px] border-2 border-gray-500 hover:scale-110 hover:cursor-pointer'
+                className='mx-auto p-1 w-[100px] h-[100px] border-2 border-gray-500 hover:scale-110 hover:cursor-pointer'
                 onClick={() => ControlOptions(options, setOptions)} />
 
               {options === true &&
@@ -59,7 +60,7 @@ function Sidebar({ user }: { user: UserDataType | any[] }) {
                 </div>
               }
             </div>
-            <p className='font-semibold mt-12'>{user.length > 0 ? user[0].name : "Name"}</p>
+            <p className='font-semibold mt-24 mb-5'>{user.length > 0 ? user[0].name : "Name"}</p>
           </div>
 
           <div className='bg-white mt-14 mb-5 w-full h-fit'>

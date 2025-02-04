@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { usePathname } from 'next/navigation';
 import { useForm } from 'react-hook-form'
+import { GlobalContext } from '../../GlobalContext/GlobalContext';
 
 type TasksDataType = [{
   _id: string,
@@ -163,6 +164,7 @@ function ControlAddStep(addStep: boolean, setAddStep: React.Dispatch<React.SetSt
 
 function TaskModal({ setTaskModal, taskData, dependancy, setDependancy, setEF }: { setTaskModal: React.Dispatch<React.SetStateAction<boolean>>, taskData: TasksDataType[0] | undefined, dependancy: boolean, setDependancy: React.Dispatch<React.SetStateAction<boolean>>, setEF: React.Dispatch<React.SetStateAction<boolean>> }) {
   const pathname = usePathname();
+  const { isDarkMode, setIsDarkMode }: any = useContext(GlobalContext);
   const [tasks, setTasks] = useState<TasksDataType | any[]>([]);
   const [dep, setDep] = useState<boolean>(false);
   const [addStep, setAddStep] = useState<boolean>(false);
@@ -180,7 +182,7 @@ function TaskModal({ setTaskModal, taskData, dependancy, setDependancy, setEF }:
   }, [dep]);
 
   return (
-    <div className='grid gap-y-3 bg-[#EEF6EF] sm:w-[40vw] w-[75vw] min-h-[100vh] px-2'>
+    <div className={`grid gap-y-3 ${isDarkMode===true ? "bg-gradient-to-b from-[#45ff4b00] to-[#02540a] text-white" : "bg-[#EEF6EF] text-black"} sm:w-[40vw] w-[75vw] min-h-[100vh] px-2`}>
       <div className='grid w-full h-fit gap-y-2'>
         <div className='flex justify-between w-full h-fit px-3 border-b-2 border-[#35793729] hover:bg-[#35793729]'>
           <div className='flex justify-between gap-x-3 w-full h-full'>
@@ -276,7 +278,7 @@ function TaskModal({ setTaskModal, taskData, dependancy, setDependancy, setEF }:
                 xmlns="http://www.w3.org/2000/svg">
                 <path
                   d="M9.16667 10.8333H0V9.16667H9.16667V0H10.8333V9.16667H20V10.8333H10.8333V20H9.16667V10.8333Z"
-                  fill="black"
+                  fill="currentColor"
                 />
               </svg>
               <p className='font-semibold'>Add Step</p>

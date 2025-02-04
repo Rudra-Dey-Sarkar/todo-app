@@ -56,7 +56,7 @@ function AddTask({user, setAF}:{user:UserDataType | any[], setAF:React.Dispatch<
   return (
     <form
       onSubmit={handleSubmit((data) =>  AddTaskData(data, setAF))}
-      className='grid border-2 border-gray-300 p-2'>
+      className='grid border-2 border-gray-300 p-2 text-black'>
 
       <label htmlFor="text">Enter Task Name</label>
       <input type="text"

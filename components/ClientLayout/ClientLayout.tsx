@@ -18,6 +18,7 @@ type UserDataType = [{
 function ClientLayout({ children }: { children: React.ReactNode }) {
     const router = useRouter();
     const { isPresent, setIsPresent }: any = useContext(GlobalContext);
+    const { isDarkMode, setIsDarkMode }: any = useContext(GlobalContext);
     const [user, setUser] = useState<UserDataType | any[]>([]);
 
     useEffect(() => {
@@ -37,7 +38,7 @@ function ClientLayout({ children }: { children: React.ReactNode }) {
     }, [isPresent]);
 
     return (
-        <div className='w-full h-full'>
+        <div className={`w-full h-full ${isDarkMode===true?"bg-black":"currentColor"}`}>
             <Toaster />
             {isPresent === true &&
                 <Topbar />

@@ -76,7 +76,7 @@ function EditTask({ taskData, setEF, dependancy, setDependancy, setTaskModal }: 
   return (
     <form
       onSubmit={handleSubmit((data) =>EditTaskStepsData(data,dependancy, setDependancy, setTaskModal, setEF))}
-      className='grid border-2 border-gray-300 p-2'>
+      className='grid border-2 border-gray-300 p-2 text-black'>
       <label htmlFor="text">Enter Task Name</label>
       <input type="text"
         {...register("taskName", { required: true })}
