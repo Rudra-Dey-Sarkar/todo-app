@@ -3,13 +3,12 @@ import React, { useState, useEffect, useContext } from 'react'
 import LogReg from '../LogReg/LogReg'
 import { GlobalContext } from '../../GlobalContext/GlobalContext';
 
-
 function Main() {
   const { isActive, setIsActive }: any = useContext(GlobalContext);
-
+  const { isDarkMode, setIsDarkMode }: any = useContext(GlobalContext);
   return (
-    <div className='grid w-full h-[100vh] justify-center items-center'>
-      <div className='grid justify-center items-center gap-y-5 w-fit h-fit border-4 border-[#35793729] p-5 rounded-[10px]'>
+    <div className={`grid w-full h-[100vh] justify-center items-center ${isDarkMode===true?"text-white":"text-black"}`}>
+      <div className={`grid justify-center items-center gap-y-5 w-fit h-fit border-4 ${isDarkMode===true ? "border-[#02540a]" : "border-[#35793729]"} p-5 rounded-[10px]`}>
         <div className='flex items-center'>
           <svg
             id="Layer_1"
@@ -147,16 +146,16 @@ function Main() {
           </svg>
           <p className='text-[#3F9142] font-bold text-[2rem]'>GoalFocusedMind</p>
         </div>
-        <p className='font-semibold'>Plan smarter, work better, stay productive!</p>
+        <p className={`${isDarkMode===true?"text-white":"text-black"} text-center font-semibold`}>Plan smarter, work better, stay productive!</p>
         <div className='grid justify-center items-center gap-y-5 w-fit h-fit m-auto bg-[#EEF6EF] p-5 '>
-          <p className='w-fit text-[1.2rem] font-bold'>Please Login or Register</p>
+          <p className='w-fit text-[1.2rem] font-bold text-black'>Please Login or Register</p>
           <button
             onClick={() => setIsActive(true)}
-            className='border-2 border-[#35793729] w-fit h-fit m-auto py-1 px-4 rounded-[10px] shadow-[0px_0px_5px_5px_green] font-semibold hover:scale-105'>Login/Register</button>
+            className='border-2 border-[#35793729] w-fit h-fit m-auto py-1 px-4 rounded-[10px] shadow-[0px_0px_5px_5px_green] font-semibold hover:scale-105 text-black'>Login/Register</button>
 
           {isActive === true &&
             <div
-              className='fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50'
+              className='fixed inset-0 flex justify-center items-center bg-black text-black bg-opacity-50 z-50'
               onClick={() => setIsActive(false)}>
               <div
                 className='bg-white p-5 rounded-md shadow-lg'
