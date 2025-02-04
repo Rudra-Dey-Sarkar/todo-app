@@ -15,8 +15,8 @@ type UserDataType = {
   password: string
 }
 
-async function RegisterUser(data: UserDataType, setIsActive: any, setIsPresent: any) {
-
+async function RegisterUser(data: UserDataType, setIsActive: any, setIsPresent: any,  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>) {
+  setIsLoading(true);
   if (data.name !== "" || data.email !== "" || data.password !== "") {
     try {
       const response = await fetch("/api/register", {
@@ -29,19 +29,23 @@ async function RegisterUser(data: UserDataType, setIsActive: any, setIsPresent: 
 
       const resData = await response.json();
       if (resData?.status === 200) {
-        console.log("data save :-",resData?.message);
+        console.log("data save :-", resData?.message);
+        setIsLoading(false);
         setCookie("user", resData?.message);
         setIsActive(false);
         setIsPresent(true);
         toast.success("User Registered Successfully");
       } else {
+        setIsLoading(false);
         toast.error(resData?.message);
       }
     } catch (errors) {
+      setIsLoading(false);
       console.log("Cannot Proceed To Register User Due To :-", errors);
       toast.error("Cannot Register User");
     }
   } else {
+    setIsLoading(false);
     toast.error("Please Fill All The Fields");
   }
 }
@@ -49,6 +53,7 @@ async function RegisterUser(data: UserDataType, setIsActive: any, setIsPresent: 
 function Register() {
   const { isActive, setIsActive }: any = useContext(GlobalContext);
   const { isPresent, setIsPresent }: any = useContext(GlobalContext);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [picUrl, setPicUrl] = useState<string>("");
   const [step, setStep] = useState<number>(1);
 
@@ -64,7 +69,14 @@ function Register() {
   return (
     <div>
       {step === 1 ? <ProfileDetails form={form} /> : <PictureSelection setValue={setValue} picUrl={picUrl} setPicUrl={setPicUrl} />}
-      <form onSubmit={handleSubmit((data) => RegisterUser(data, setIsActive, setIsPresent))}>
+      <form onSubmit={handleSubmit((data) => RegisterUser(data, setIsActive, setIsPresent, setIsLoading))}>
+        {isLoading === true &&
+          <div className='fixed flex inset-0 justify-center items-center bg-gray-100 bg-opacity-50 z-50'>
+            <img
+              src="https://hstilxjonxwbqwojwimd.supabase.co/storage/v1/object/sign/profile_picture/features/loader.gif?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJwcm9maWxlX3BpY3R1cmUvZmVhdHVyZXMvbG9hZGVyLmdpZiIsImlhdCI6MTczODY2NzgyNSwiZXhwIjo0NzM0NTg3ODI1fQ.EzqgoARETFtL8vemGmLZrzTzdKfHyd0u5inm4CWtmcE" alt="Loading....."
+              className='w-[100px] h-[100px]' />
+          </div>
+        }
         <div className='mt-3'>
           {errors?.name && <p className='text-[12px] text-red-500'>Name Is Required</p>}
           {errors?.email && <p className='text-[12px] text-red-500'>Email Is Required</p>}

@@ -1,71 +1,84 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import { GlobalContext } from '../../GlobalContext/GlobalContext';
-import {useForm} from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { setCookie } from 'cookies-next';
 
 type UserDataType = {
-  email:string,
-  password:string
-  }
+  email: string,
+  password: string
+}
 
-  async function LoginUser(data: UserDataType, setIsActive: any,  setIsPresent:any) {
-    try {
-      const response = await fetch("/api/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(data)
-      });
-      
-      const resData = await response.json();
-      if (resData?.status===200) {
-        setCookie("user", resData?.message);
-        setIsActive(false);
-        setIsPresent(true);
-        toast.success("User Login successfully");
-      } else {
-        toast.error(resData?.message);
-      }
-    } catch (errors) {
-      console.log("Cannot Proceed To Register User Due To :-", errors);
-      toast.error("Cannot Register User");
+async function LoginUser(data: UserDataType, setIsActive: any, setIsPresent: any, setIsLoading: React.Dispatch<React.SetStateAction<boolean>>) {
+  setIsLoading(true);
+  try {
+    const response = await fetch("/api/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(data)
+    });
+
+    const resData = await response.json();
+    if (resData?.status === 200) {
+      setCookie("user", resData?.message);
+      setIsLoading(false);
+      setIsActive(false);
+      setIsPresent(true);
+      toast.success("User Login successfully");
+    } else {
+      setIsLoading(false);
+      toast.error(resData?.message);
     }
+  } catch (errors) {
+    setIsLoading(false);
+    console.log("Cannot Proceed To Register User Due To :-", errors);
+    toast.error("Cannot Register User");
   }
+}
 
 function Login() {
-  const {isActive, setIsActive}:any = useContext(GlobalContext);
-  const {isPresent, setIsPresent}:any = useContext(GlobalContext);
-
-    const form = useForm<UserDataType>({defaultValues:{
-      email:"",
-      password:""
-    }});
+  const { isActive, setIsActive }: any = useContext(GlobalContext);
+  const { isPresent, setIsPresent }: any = useContext(GlobalContext);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   
-    const {register, handleSubmit, formState:{errors}} = form;
+  const form = useForm<UserDataType>({
+    defaultValues: {
+      email: "",
+      password: ""
+    }
+  });
+
+  const { register, handleSubmit, formState: { errors } } = form;
 
   return (
-    <form 
-    onSubmit={handleSubmit((data)=>LoginUser(data, setIsActive,  setIsPresent))}
-    className='grid border-2 border-gray-300 p-2'>
-
+    <form
+      onSubmit={handleSubmit((data) => LoginUser(data, setIsActive, setIsPresent, setIsLoading))}
+      className='grid border-2 border-gray-300 p-2'>
+      {isLoading === true &&
+        <div className='fixed flex inset-0 justify-center items-center bg-gray-100 bg-opacity-50 z-50'>
+          <img
+            src="https://hstilxjonxwbqwojwimd.supabase.co/storage/v1/object/sign/profile_picture/features/loader.gif?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJwcm9maWxlX3BpY3R1cmUvZmVhdHVyZXMvbG9hZGVyLmdpZiIsImlhdCI6MTczODY2NzgyNSwiZXhwIjo0NzM0NTg3ODI1fQ.EzqgoARETFtL8vemGmLZrzTzdKfHyd0u5inm4CWtmcE" alt="Loading....."
+            className='w-[100px] h-[100px]' />
+        </div>
+      }
       <label htmlFor="email">Enter Email</label>
       <input type="email"
-       {...register("email", {required:true})}
-       className='border-2 border-gray-300 p-1' />
+        {...register("email", { required: true })}
+        className='border-2 border-gray-300 p-1' />
       {errors?.email && <p className='text-[12px] text-red-500'>Email Is Required</p>}
 
       <label htmlFor="password">Enter Password</label>
-      <input 
-      type="password" 
-      {...register("password", {required:true})}
-      className='border-2 border-gray-300 p-1' />
+      <input
+        type="password"
+        {...register("password", { required: true })}
+        className='border-2 border-gray-300 p-1' />
       {errors?.password && <p className='text-[12px] text-red-500'>Password Is Required</p>}
 
-      <button 
-      type='submit'
-      className='bg-gray-300 p-2 mt-2 font-semibold'>Login</button>
+      <button
+        type='submit'
+        className='bg-gray-300 p-2 mt-2 font-semibold'>Login</button>
     </form>
   )
 }
